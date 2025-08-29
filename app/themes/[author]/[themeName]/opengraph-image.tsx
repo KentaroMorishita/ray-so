@@ -8,20 +8,20 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 const assetsPromise = Promise.all([
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/Inter-Regular.woff")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/Inter-Medium.woff")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/Inter-SemiBold.woff")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/Inter-Bold.woff")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/grid-item-1-light.jpg")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/grid-item-2-light.jpg")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/grid-item-3-light.jpg")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/grid-item-4-light.jpg")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/grid-item-5-light.jpg")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/grid-item-1-dark.jpg")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/grid-item-2-dark.jpg")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/grid-item-3-dark.jpg")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/grid-item-4-dark.jpg")),
-  readFile(join(process.cwd(), "app/(navigation)/themes/assets/grid-item-5-dark.jpg")),
+  readFile(join(process.cwd(), "public/fonts/Inter-Regular.woff")),
+  readFile(join(process.cwd(), "public/fonts/Inter-Medium.woff")),
+  readFile(join(process.cwd(), "public/fonts/Inter-SemiBold.woff")),
+  readFile(join(process.cwd(), "public/fonts/Inter-Bold.woff")),
+  readFile(join(process.cwd(), "public/grid-item-1-light.jpg")),
+  readFile(join(process.cwd(), "public/grid-item-2-light.jpg")),
+  readFile(join(process.cwd(), "public/grid-item-3-light.jpg")),
+  readFile(join(process.cwd(), "public/grid-item-4-light.jpg")),
+  readFile(join(process.cwd(), "public/grid-item-5-light.jpg")),
+  readFile(join(process.cwd(), "public/grid-item-1-dark.jpg")),
+  readFile(join(process.cwd(), "public/grid-item-2-dark.jpg")),
+  readFile(join(process.cwd(), "public/grid-item-3-dark.jpg")),
+  readFile(join(process.cwd(), "public/grid-item-4-dark.jpg")),
+  readFile(join(process.cwd(), "public/grid-item-5-dark.jpg")),
 ]);
 
 export const alt = "Raycast Theme Preview";
