@@ -7,22 +7,30 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-const assetsPromise = Promise.all([
-  readFile(join(process.cwd(), "public/fonts/Inter-Regular.woff")),
-  readFile(join(process.cwd(), "public/fonts/Inter-Medium.woff")),
-  readFile(join(process.cwd(), "public/fonts/Inter-SemiBold.woff")),
-  readFile(join(process.cwd(), "public/fonts/Inter-Bold.woff")),
-  readFile(join(process.cwd(), "public/grid-item-1-light.jpg")),
-  readFile(join(process.cwd(), "public/grid-item-2-light.jpg")),
-  readFile(join(process.cwd(), "public/grid-item-3-light.jpg")),
-  readFile(join(process.cwd(), "public/grid-item-4-light.jpg")),
-  readFile(join(process.cwd(), "public/grid-item-5-light.jpg")),
-  readFile(join(process.cwd(), "public/grid-item-1-dark.jpg")),
-  readFile(join(process.cwd(), "public/grid-item-2-dark.jpg")),
-  readFile(join(process.cwd(), "public/grid-item-3-dark.jpg")),
-  readFile(join(process.cwd(), "public/grid-item-4-dark.jpg")),
-  readFile(join(process.cwd(), "public/grid-item-5-dark.jpg")),
-]);
+async function loadAssets() {
+  try {
+    return await Promise.all([
+      readFile(join(process.cwd(), "public/fonts/Inter-Regular.woff")),
+      readFile(join(process.cwd(), "public/fonts/Inter-Medium.woff")),
+      readFile(join(process.cwd(), "public/fonts/Inter-SemiBold.woff")),
+      readFile(join(process.cwd(), "public/fonts/Inter-Bold.woff")),
+      readFile(join(process.cwd(), "public/grid-item-1-light.jpg")),
+      readFile(join(process.cwd(), "public/grid-item-2-light.jpg")),
+      readFile(join(process.cwd(), "public/grid-item-3-light.jpg")),
+      readFile(join(process.cwd(), "public/grid-item-4-light.jpg")),
+      readFile(join(process.cwd(), "public/grid-item-5-light.jpg")),
+      readFile(join(process.cwd(), "public/grid-item-1-dark.jpg")),
+      readFile(join(process.cwd(), "public/grid-item-2-dark.jpg")),
+      readFile(join(process.cwd(), "public/grid-item-3-dark.jpg")),
+      readFile(join(process.cwd(), "public/grid-item-4-dark.jpg")),
+      readFile(join(process.cwd(), "public/grid-item-5-dark.jpg")),
+    ]);
+  } catch (error) {
+    console.error("Failed to load assets:", error);
+    // Return null values for fonts and empty buffers for images
+    return Array(14).fill(null);
+  }
+}
 
 export const alt = "Raycast Theme Preview";
 export const size = {
@@ -87,22 +95,22 @@ export default async function Image({ params }: { params: Promise<{ author: stri
     darkGridImage3Data,
     darkGridImage4Data,
     darkGridImage5Data,
-  ] = await assetsPromise;
+  ] = await loadAssets();
 
   const images = {
     light: [
-      `data:image/jpeg;base64,${lightGridImage1Data.toString("base64")}`,
-      `data:image/jpeg;base64,${lightGridImage2Data.toString("base64")}`,
-      `data:image/jpeg;base64,${lightGridImage3Data.toString("base64")}`,
-      `data:image/jpeg;base64,${lightGridImage4Data.toString("base64")}`,
-      `data:image/jpeg;base64,${lightGridImage5Data.toString("base64")}`,
+      lightGridImage1Data ? `data:image/jpeg;base64,${lightGridImage1Data.toString("base64")}` : "",
+      lightGridImage2Data ? `data:image/jpeg;base64,${lightGridImage2Data.toString("base64")}` : "",
+      lightGridImage3Data ? `data:image/jpeg;base64,${lightGridImage3Data.toString("base64")}` : "",
+      lightGridImage4Data ? `data:image/jpeg;base64,${lightGridImage4Data.toString("base64")}` : "",
+      lightGridImage5Data ? `data:image/jpeg;base64,${lightGridImage5Data.toString("base64")}` : "",
     ],
     dark: [
-      `data:image/jpeg;base64,${darkGridImage1Data.toString("base64")}`,
-      `data:image/jpeg;base64,${darkGridImage2Data.toString("base64")}`,
-      `data:image/jpeg;base64,${darkGridImage3Data.toString("base64")}`,
-      `data:image/jpeg;base64,${darkGridImage4Data.toString("base64")}`,
-      `data:image/jpeg;base64,${darkGridImage5Data.toString("base64")}`,
+      darkGridImage1Data ? `data:image/jpeg;base64,${darkGridImage1Data.toString("base64")}` : "",
+      darkGridImage2Data ? `data:image/jpeg;base64,${darkGridImage2Data.toString("base64")}` : "",
+      darkGridImage3Data ? `data:image/jpeg;base64,${darkGridImage3Data.toString("base64")}` : "",
+      darkGridImage4Data ? `data:image/jpeg;base64,${darkGridImage4Data.toString("base64")}` : "",
+      darkGridImage5Data ? `data:image/jpeg;base64,${darkGridImage5Data.toString("base64")}` : "",
     ],
   };
 
@@ -469,21 +477,11 @@ export default async function Image({ params }: { params: Promise<{ author: stri
               </div>
 
               <div style={{ display: "flex", gap: 8, padding: "0 8px" }}>
-                <div style={gridCellStyle}>
-                  <img src={images[theme.appearance][0]} />
-                </div>
-                <div style={gridCellStyle}>
-                  <img src={images[theme.appearance][1]} />
-                </div>
-                <div style={gridCellStyle}>
-                  <img src={images[theme.appearance][2]} />
-                </div>
-                <div style={gridCellStyle}>
-                  <img src={images[theme.appearance][3]} />
-                </div>
-                <div style={gridCellStyle}>
-                  <img src={images[theme.appearance][4]} />
-                </div>
+                {images[theme.appearance].map((src, index) => (
+                  <div key={index} style={gridCellStyle}>
+                    {src && <img src={src} />}
+                  </div>
+                ))}
               </div>
             </div>
           </main>
@@ -569,12 +567,14 @@ export default async function Image({ params }: { params: Promise<{ author: stri
     ),
     {
       ...size,
-      fonts: [
-        { name: "Inter", data: interData, weight: 400, style: "normal" },
-        { name: "Inter", data: inter500Data, weight: 500, style: "normal" },
-        { name: "Inter", data: inter600Data, weight: 600, style: "normal" },
-        { name: "Inter", data: inter700Data, weight: 700, style: "normal" },
-      ],
+      fonts: interData
+        ? [
+            { name: "Inter", data: interData, weight: 400, style: "normal" },
+            { name: "Inter", data: inter500Data, weight: 500, style: "normal" },
+            { name: "Inter", data: inter600Data, weight: 600, style: "normal" },
+            { name: "Inter", data: inter700Data, weight: 700, style: "normal" },
+          ]
+        : [],
     },
   );
 }
